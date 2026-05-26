@@ -15,7 +15,7 @@ export async function getActivityLogsByApplication(applicationId: string): Promi
 export async function createActivityLog(log: ActivityLogInsert): Promise<ActivityLog> {
   const { data, error } = await supabase
     .from('activity_logs')
-    .insert(log as Record<string, unknown>)
+    .insert(log as never)
     .select()
     .single()
 

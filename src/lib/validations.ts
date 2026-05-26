@@ -40,7 +40,7 @@ export const applicationSchema = z.object({
     'technical_round_1', 'technical_round_2', 'assignment_given',
     'managerial_round', 'hr_round', 'offer_received', 'rejected',
     'joined', 'on_hold',
-  ]).default('hr_called'),
+  ]),
   notes: z.string().optional(),
 })
 
@@ -48,12 +48,12 @@ export const interviewRoundSchema = z.object({
   round_type: z.string().min(1, 'Round type is required'),
   scheduled_at: z.string().optional(),
   notes: z.string().optional(),
-  status: z.enum(['scheduled', 'completed', 'cancelled']).default('scheduled'),
+  status: z.enum(['scheduled', 'completed', 'cancelled']),
 })
 
 export const followUpSchema = z.object({
   follow_up_date: z.string().min(1, 'Follow-up date is required'),
-  type: z.enum(['callback', 'interview', 'email', 'general']).default('general'),
+  type: z.enum(['callback', 'interview', 'email', 'general']),
   description: z.string().optional(),
 })
 

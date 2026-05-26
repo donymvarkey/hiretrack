@@ -40,7 +40,7 @@ export async function getPendingFollowUps(): Promise<FollowUpWithApplication[]> 
 export async function createFollowUp(followUp: FollowUpInsert): Promise<FollowUp> {
   const { data, error } = await supabase
     .from('follow_ups')
-    .insert(followUp as Record<string, unknown>)
+    .insert(followUp as never)
     .select()
     .single()
 
@@ -51,7 +51,7 @@ export async function createFollowUp(followUp: FollowUpInsert): Promise<FollowUp
 export async function updateFollowUp(id: string, updates: FollowUpUpdate): Promise<FollowUp> {
   const { data, error } = await supabase
     .from('follow_ups')
-    .update(updates as Record<string, unknown>)
+    .update(updates as never)
     .eq('id', id)
     .select()
     .single()

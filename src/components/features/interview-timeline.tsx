@@ -34,6 +34,12 @@ export function InterviewTimeline({ applicationId }: InterviewTimelineProps) {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<InterviewRoundFormData>({
     resolver: zodResolver(interviewRoundSchema),
+    defaultValues: {
+      round_type: '',
+      status: 'scheduled',
+      scheduled_at: '',
+      notes: '',
+    },
   })
 
   const createMutation = useMutation({

@@ -15,7 +15,7 @@ export async function getNotesByApplication(applicationId: string): Promise<Note
 export async function createNote(note: NoteInsert): Promise<Note> {
   const { data, error } = await supabase
     .from('notes')
-    .insert(note as Record<string, unknown>)
+    .insert(note as never)
     .select()
     .single()
 

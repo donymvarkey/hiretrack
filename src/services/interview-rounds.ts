@@ -15,7 +15,7 @@ export async function getInterviewRoundsByApplication(applicationId: string): Pr
 export async function createInterviewRound(round: InterviewRoundInsert): Promise<InterviewRound> {
   const { data, error } = await supabase
     .from('interview_rounds')
-    .insert(round as Record<string, unknown>)
+    .insert(round as never)
     .select()
     .single()
 
@@ -26,7 +26,7 @@ export async function createInterviewRound(round: InterviewRoundInsert): Promise
 export async function updateInterviewRound(id: string, updates: InterviewRoundUpdate): Promise<InterviewRound> {
   const { data, error } = await supabase
     .from('interview_rounds')
-    .update(updates as Record<string, unknown>)
+    .update(updates as never)
     .eq('id', id)
     .select()
     .single()

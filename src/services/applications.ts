@@ -25,7 +25,7 @@ export async function getApplication(id: string): Promise<Application> {
 export async function createApplication(application: ApplicationInsert): Promise<Application> {
   const { data, error } = await supabase
     .from('applications')
-    .insert(application as Record<string, unknown>)
+    .insert(application as never)
     .select()
     .single()
 
@@ -36,7 +36,7 @@ export async function createApplication(application: ApplicationInsert): Promise
 export async function updateApplication(id: string, updates: ApplicationUpdate): Promise<Application> {
   const { data, error } = await supabase
     .from('applications')
-    .update({ ...updates, updated_at: new Date().toISOString() } as Record<string, unknown>)
+    .update({ ...updates, updated_at: new Date().toISOString() } as never)
     .eq('id', id)
     .select()
     .single()

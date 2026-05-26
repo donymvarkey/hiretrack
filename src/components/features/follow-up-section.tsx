@@ -35,6 +35,11 @@ export function FollowUpSection({ applicationId }: FollowUpSectionProps) {
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FollowUpFormData>({
     resolver: zodResolver(followUpSchema),
+    defaultValues: {
+      follow_up_date: '',
+      type: 'general',
+      description: '',
+    },
   })
 
   const createMutation = useMutation({
