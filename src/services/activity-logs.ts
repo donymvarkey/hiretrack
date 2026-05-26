@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
-import type { ActivityLogInsert } from '@/types'
+import type { ActivityLog, ActivityLogInsert, Application } from '@/types'
 
-export async function getActivityLogsByApplication(applicationId: string) {
+export async function getActivityLogsByApplication(applicationId: string): Promise<ActivityLog[]> {
   const { data, error } = await supabase
     .from('activity_logs')
     .select('*')
@@ -9,26 +9,28 @@ export async function getActivityLogsByApplication(applicationId: string) {
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  return data as ActivityLog[]
 }
 
-export async function createActivityLog(log: ActivityLogInsert) {
+export async function createActivityLog(log: ActivityLogInsert): Promise<ActivityLog> {
   const { data, error } = await supabase
     .from('activity_logs')
-    .insert(log)
+    .insert(log as Record<string, unknown>)
     .select()
     .single()
 
   if (error) throw error
-  return data
+  return data as ActivityLog
 }
 
 export async function getDashboardStats() {
-  const { data: applications, error } = await supabase
+  const { data, error } = await supabase
     .from('applications')
     .select('status, created_at')
 
   if (error) throw error
+
+  const applications = data as Pick<Application, 'status' | 'created_at'>[]
 
   const total = applications.length
   const active = applications.filter((a) =>

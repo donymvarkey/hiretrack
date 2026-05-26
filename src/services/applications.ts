@@ -1,17 +1,17 @@
 import { supabase } from '@/lib/supabase'
-import type { ApplicationInsert, ApplicationUpdate } from '@/types'
+import type { Application, ApplicationInsert, ApplicationUpdate } from '@/types'
 
-export async function getApplications() {
+export async function getApplications(): Promise<Application[]> {
   const { data, error } = await supabase
     .from('applications')
     .select('*')
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  return data as Application[]
 }
 
-export async function getApplication(id: string) {
+export async function getApplication(id: string): Promise<Application> {
   const { data, error } = await supabase
     .from('applications')
     .select('*')
@@ -19,33 +19,33 @@ export async function getApplication(id: string) {
     .single()
 
   if (error) throw error
-  return data
+  return data as Application
 }
 
-export async function createApplication(application: ApplicationInsert) {
+export async function createApplication(application: ApplicationInsert): Promise<Application> {
   const { data, error } = await supabase
     .from('applications')
-    .insert(application)
+    .insert(application as Record<string, unknown>)
     .select()
     .single()
 
   if (error) throw error
-  return data
+  return data as Application
 }
 
-export async function updateApplication(id: string, updates: ApplicationUpdate) {
+export async function updateApplication(id: string, updates: ApplicationUpdate): Promise<Application> {
   const { data, error } = await supabase
     .from('applications')
-    .update({ ...updates, updated_at: new Date().toISOString() })
+    .update({ ...updates, updated_at: new Date().toISOString() } as Record<string, unknown>)
     .eq('id', id)
     .select()
     .single()
 
   if (error) throw error
-  return data
+  return data as Application
 }
 
-export async function deleteApplication(id: string) {
+export async function deleteApplication(id: string): Promise<void> {
   const { error } = await supabase
     .from('applications')
     .delete()
@@ -54,7 +54,7 @@ export async function deleteApplication(id: string) {
   if (error) throw error
 }
 
-export async function searchApplications(query: string) {
+export async function searchApplications(query: string): Promise<Application[]> {
   const { data, error } = await supabase
     .from('applications')
     .select('*')
@@ -62,5 +62,5 @@ export async function searchApplications(query: string) {
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  return data as Application[]
 }

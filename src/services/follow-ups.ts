@@ -1,17 +1,21 @@
 import { supabase } from '@/lib/supabase'
-import type { FollowUpInsert, FollowUpUpdate } from '@/types'
+import type { FollowUp, FollowUpInsert, FollowUpUpdate } from '@/types'
 
-export async function getFollowUps() {
+export interface FollowUpWithApplication extends FollowUp {
+  applications: { company_name: string; job_role: string | null } | null
+}
+
+export async function getFollowUps(): Promise<FollowUpWithApplication[]> {
   const { data, error } = await supabase
     .from('follow_ups')
     .select('*, applications(company_name, job_role)')
     .order('follow_up_date', { ascending: true })
 
   if (error) throw error
-  return data
+  return data as FollowUpWithApplication[]
 }
 
-export async function getFollowUpsByApplication(applicationId: string) {
+export async function getFollowUpsByApplication(applicationId: string): Promise<FollowUp[]> {
   const { data, error } = await supabase
     .from('follow_ups')
     .select('*')
@@ -19,10 +23,10 @@ export async function getFollowUpsByApplication(applicationId: string) {
     .order('follow_up_date', { ascending: true })
 
   if (error) throw error
-  return data
+  return data as FollowUp[]
 }
 
-export async function getPendingFollowUps() {
+export async function getPendingFollowUps(): Promise<FollowUpWithApplication[]> {
   const { data, error } = await supabase
     .from('follow_ups')
     .select('*, applications(company_name, job_role)')
@@ -30,33 +34,33 @@ export async function getPendingFollowUps() {
     .order('follow_up_date', { ascending: true })
 
   if (error) throw error
-  return data
+  return data as FollowUpWithApplication[]
 }
 
-export async function createFollowUp(followUp: FollowUpInsert) {
+export async function createFollowUp(followUp: FollowUpInsert): Promise<FollowUp> {
   const { data, error } = await supabase
     .from('follow_ups')
-    .insert(followUp)
+    .insert(followUp as Record<string, unknown>)
     .select()
     .single()
 
   if (error) throw error
-  return data
+  return data as FollowUp
 }
 
-export async function updateFollowUp(id: string, updates: FollowUpUpdate) {
+export async function updateFollowUp(id: string, updates: FollowUpUpdate): Promise<FollowUp> {
   const { data, error } = await supabase
     .from('follow_ups')
-    .update(updates)
+    .update(updates as Record<string, unknown>)
     .eq('id', id)
     .select()
     .single()
 
   if (error) throw error
-  return data
+  return data as FollowUp
 }
 
-export async function deleteFollowUp(id: string) {
+export async function deleteFollowUp(id: string): Promise<void> {
   const { error } = await supabase
     .from('follow_ups')
     .delete()

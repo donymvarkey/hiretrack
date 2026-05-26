@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { PageLoader } from '@/components/ui/spinner'
 import { EmptyState } from '@/components/ui/empty-state'
-import { getFollowUps, updateFollowUp, deleteFollowUp } from '@/services/follow-ups'
+import { getFollowUps, updateFollowUp, deleteFollowUp, type FollowUpWithApplication } from '@/services/follow-ups'
 import { FOLLOW_UP_TYPES } from '@/types'
 import { formatDate } from '@/lib/utils'
 import { Link } from 'react-router-dom'
@@ -70,8 +70,7 @@ export function FollowUpsPage() {
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
             Pending
           </h2>
-          {pending.map((followUp) => {
-            const app = (followUp as Record<string, unknown>).applications as { company_name: string; job_role: string | null } | null
+          {pending.map((followUp: FollowUpWithApplication) => {
             const typeInfo = FOLLOW_UP_TYPES[followUp.type as keyof typeof FOLLOW_UP_TYPES]
             const isOverdue = new Date(followUp.follow_up_date) < new Date()
 
@@ -87,7 +86,7 @@ export function FollowUpsPage() {
                             to={`/applications/${followUp.application_id}`}
                             className="text-sm font-medium hover:underline truncate"
                           >
-                            {app?.company_name ?? 'Unknown'}
+                            {followUp.applications?.company_name ?? 'Unknown'}
                           </Link>
                           <Badge className={`text-xs ${typeInfo?.color ?? ''}`}>
                             {typeInfo?.label}
@@ -135,8 +134,7 @@ export function FollowUpsPage() {
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
             Completed
           </h2>
-          {completed.map((followUp) => {
-            const app = (followUp as Record<string, unknown>).applications as { company_name: string; job_role: string | null } | null
+          {completed.map((followUp: FollowUpWithApplication) => {
             const typeInfo = FOLLOW_UP_TYPES[followUp.type as keyof typeof FOLLOW_UP_TYPES]
 
             return (
@@ -148,7 +146,7 @@ export function FollowUpsPage() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium truncate">
-                            {app?.company_name ?? 'Unknown'}
+                            {followUp.applications?.company_name ?? 'Unknown'}
                           </span>
                           <Badge className={`text-xs ${typeInfo?.color ?? ''}`}>
                             {typeInfo?.label}

@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
-import type { NoteInsert } from '@/types'
+import type { Note, NoteInsert } from '@/types'
 
-export async function getNotesByApplication(applicationId: string) {
+export async function getNotesByApplication(applicationId: string): Promise<Note[]> {
   const { data, error } = await supabase
     .from('notes')
     .select('*')
@@ -9,21 +9,21 @@ export async function getNotesByApplication(applicationId: string) {
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  return data as Note[]
 }
 
-export async function createNote(note: NoteInsert) {
+export async function createNote(note: NoteInsert): Promise<Note> {
   const { data, error } = await supabase
     .from('notes')
-    .insert(note)
+    .insert(note as Record<string, unknown>)
     .select()
     .single()
 
   if (error) throw error
-  return data
+  return data as Note
 }
 
-export async function deleteNote(id: string) {
+export async function deleteNote(id: string): Promise<void> {
   const { error } = await supabase
     .from('notes')
     .delete()

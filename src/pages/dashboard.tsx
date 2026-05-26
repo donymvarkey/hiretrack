@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge'
 import { PageLoader } from '@/components/ui/spinner'
 import { getDashboardStats } from '@/services/activity-logs'
 import { getApplications } from '@/services/applications'
-import { getPendingFollowUps } from '@/services/follow-ups'
+import { getPendingFollowUps, type FollowUpWithApplication } from '@/services/follow-ups'
 import { APPLICATION_STATUSES } from '@/types'
 import { formatDate, formatRelativeDate } from '@/lib/utils'
 import { Link } from 'react-router-dom'
@@ -131,8 +131,7 @@ export function DashboardPage() {
               </p>
             ) : (
               <div className="space-y-3">
-                {pendingFollowUps.map((followUp) => {
-                  const app = (followUp as Record<string, unknown>).applications as { company_name: string; job_role: string | null } | null
+                {pendingFollowUps.map((followUp: FollowUpWithApplication) => {
                   const isOverdue = new Date(followUp.follow_up_date) < new Date()
                   return (
                     <div
@@ -147,7 +146,7 @@ export function DashboardPage() {
                         )}
                         <div className="min-w-0">
                           <p className="text-sm font-medium truncate">
-                            {app?.company_name ?? 'Unknown'}
+                            {followUp.applications?.company_name ?? 'Unknown'}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {followUp.description || followUp.type}
