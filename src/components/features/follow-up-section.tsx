@@ -53,6 +53,7 @@ export function FollowUpSection({ applicationId }: FollowUpSectionProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['follow-ups', applicationId] })
       queryClient.invalidateQueries({ queryKey: ['pending-follow-ups'] })
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
       reset()
       setAddOpen(false)
     },
@@ -63,6 +64,7 @@ export function FollowUpSection({ applicationId }: FollowUpSectionProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['follow-ups', applicationId] })
       queryClient.invalidateQueries({ queryKey: ['pending-follow-ups'] })
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
     },
   })
 
@@ -71,6 +73,7 @@ export function FollowUpSection({ applicationId }: FollowUpSectionProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['follow-ups', applicationId] })
       queryClient.invalidateQueries({ queryKey: ['pending-follow-ups'] })
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
     },
   })
 

@@ -53,6 +53,7 @@ export function InterviewTimeline({ applicationId }: InterviewTimelineProps) {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['interview-rounds', applicationId] })
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
       reset()
       setAddOpen(false)
     },
@@ -66,6 +67,7 @@ export function InterviewTimeline({ applicationId }: InterviewTimelineProps) {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['interview-rounds', applicationId] })
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
     },
   })
 

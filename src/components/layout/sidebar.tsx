@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard,
   Briefcase,
+  Calendar,
   Bell,
   Settings,
   X,
@@ -12,6 +13,7 @@ import { useAppStore } from '@/store/app-store'
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/applications', icon: Briefcase, label: 'Applications' },
+  { to: '/calendar', icon: Calendar, label: 'Calendar' },
   { to: '/follow-ups', icon: Bell, label: 'Follow-ups' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ]

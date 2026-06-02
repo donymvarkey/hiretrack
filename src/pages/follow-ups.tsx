@@ -23,6 +23,7 @@ export function FollowUpsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['all-follow-ups'] })
       queryClient.invalidateQueries({ queryKey: ['pending-follow-ups'] })
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
     },
   })
 
@@ -31,6 +32,7 @@ export function FollowUpsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['all-follow-ups'] })
       queryClient.invalidateQueries({ queryKey: ['pending-follow-ups'] })
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] })
     },
   })
 

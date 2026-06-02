@@ -10,6 +10,7 @@ import { DashboardPage } from '@/pages/dashboard'
 import { ApplicationsListPage } from '@/pages/applications/applications-list'
 import { ApplicationDetailPage } from '@/pages/applications/application-detail'
 import { FollowUpsPage } from '@/pages/follow-ups'
+import { CalendarPage } from '@/pages/calendar'
 import { SettingsPage } from '@/pages/settings'
 import { PageLoader } from '@/components/ui/spinner'
 
@@ -59,6 +60,7 @@ function AppRoutes() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/applications" element={<ApplicationsListPage />} />
         <Route path="/applications/:id" element={<ApplicationDetailPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/follow-ups" element={<FollowUpsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
