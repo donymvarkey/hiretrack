@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /$
+Allow: /login
+Allow: /signup
+# App content lives behind authentication and is not crawlable
+Disallow: /applications
+Disallow: /calendar
+Disallow: /follow-ups
+Disallow: /settings
+
+Sitemap: https://hiretrack.app/sitemap.xml

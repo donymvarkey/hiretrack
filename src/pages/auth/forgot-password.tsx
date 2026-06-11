@@ -6,8 +6,8 @@ import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Spinner } from '@/components/ui/spinner'
+import { AuthLayout } from '@/components/layout/auth-layout'
 import { useAuthStore } from '@/store/auth-store'
 import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/lib/validations'
 
@@ -39,56 +39,47 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Reset password</CardTitle>
-          <CardDescription>
-            {success
-              ? 'Check your email for a reset link'
-              : 'Enter your email to receive a password reset link'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {!success ? (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  {...register('email')}
-                />
-                {errors.email && (
-                  <p className="text-xs text-red-400">{errors.email.message}</p>
-                )}
-              </div>
+    <AuthLayout
+      title="Reset password"
+      subtitle={
+        success
+          ? 'Check your email for a reset link'
+          : 'Enter your email to receive a password reset link'
+      }
+    >
+      {!success ? (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              autoComplete="email"
+              {...register('email')}
+            />
+            {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+          </div>
 
-              {error && (
-                <p className="text-xs text-red-400 text-center">{error}</p>
-              )}
+          {error && <p className="text-center text-xs text-destructive">{error}</p>}
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? <Spinner size="sm" /> : 'Send Reset Link'}
-              </Button>
-            </form>
-          ) : (
-            <p className="text-sm text-center text-muted-foreground">
-              If an account exists with that email, you&apos;ll receive a password reset link shortly.
-            </p>
-          )}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? <Spinner size="sm" className="text-white" /> : 'Send Reset Link'}
+          </Button>
+        </form>
+      ) : (
+        <div className="rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground">
+          If an account exists with that email, you&apos;ll receive a password reset link shortly.
+        </div>
+      )}
 
-          <Link
-            to="/login"
-            className="flex items-center justify-center gap-1 text-sm text-muted-foreground hover:text-foreground mt-4"
-          >
-            <ArrowLeft className="h-3 w-3" />
-            Back to login
-          </Link>
-        </CardContent>
-      </Card>
-    </div>
+      <Link
+        to="/login"
+        className="mt-6 flex items-center justify-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        Back to login
+      </Link>
+    </AuthLayout>
   )
 }
