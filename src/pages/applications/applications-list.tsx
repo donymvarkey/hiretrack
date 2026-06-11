@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { Plus, Search, Briefcase, Filter } from 'lucide-react'
+import { Plus, Search, Briefcase, Filter, Upload, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -47,10 +47,18 @@ export function ApplicationsListPage() {
             {applications?.length ?? 0} total applications
           </p>
         </div>
-        <Button onClick={() => setQuickAddOpen(true)} className="gap-1.5">
-          <Plus className="h-4 w-4" />
-          <span className="hidden sm:inline">Add New</span>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Link to="/applications/import">
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <Upload className="h-4 w-4" />
+              <span className="hidden sm:inline">Import</span>
+            </Button>
+          </Link>
+          <Button onClick={() => setQuickAddOpen(true)} size="sm" className="gap-1.5">
+            <Plus className="h-4 w-4" />
+            <span className="hidden sm:inline">Add New</span>
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -106,26 +114,28 @@ export function ApplicationsListPage() {
             const statusInfo = APPLICATION_STATUSES[app.status as ApplicationStatus]
             return (
               <Link key={app.id} to={`/applications/${app.id}`}>
-                <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
+                <Card className="group transition-all hover:border-primary/40 hover:shadow-md">
                   <CardContent className="p-4">
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-sm font-bold uppercase text-white shadow-sm">
+                        {app.company_name.slice(0, 2)}
+                      </div>
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-medium truncate">{app.company_name}</h3>
-                          <Badge className={statusInfo?.color}>
-                            {statusInfo?.label}
-                          </Badge>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="truncate font-semibold">{app.company_name}</h3>
+                          <Badge className={statusInfo?.color}>{statusInfo?.label}</Badge>
                         </div>
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                           {app.job_role && <span>{app.job_role}</span>}
-                          {app.hr_name && <span>HR: {app.hr_name}</span>}
-                          {app.job_location && <span>{app.job_location}</span>}
-                          {app.salary_offered && <span>₹{app.salary_offered}</span>}
+                          {app.hr_name && <span>· HR: {app.hr_name}</span>}
+                          {app.job_location && <span>· {app.job_location}</span>}
+                          {app.salary_offered && <span>· ₹{app.salary_offered}</span>}
                         </div>
                       </div>
-                      <span className="text-xs text-muted-foreground shrink-0">
+                      <span className="hidden shrink-0 text-xs text-muted-foreground sm:block">
                         {formatRelativeDate(app.created_at)}
                       </span>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
                     </div>
                   </CardContent>
                 </Card>

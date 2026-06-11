@@ -77,11 +77,11 @@ export function FollowUpsPage() {
             const isOverdue = new Date(followUp.follow_up_date) < new Date()
 
             return (
-              <Card key={followUp.id} className={isOverdue ? 'border-red-500/30' : ''}>
+              <Card key={followUp.id} className={isOverdue ? 'border-destructive/40' : ''}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <Calendar className={`h-4 w-4 shrink-0 ${isOverdue ? 'text-red-400' : 'text-muted-foreground'}`} />
+                      <Calendar className={`h-4 w-4 shrink-0 ${isOverdue ? 'text-destructive' : 'text-muted-foreground'}`} />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <Link
@@ -94,7 +94,7 @@ export function FollowUpsPage() {
                             {typeInfo?.label}
                           </Badge>
                           {isOverdue && (
-                            <Badge className="bg-red-500/20 text-red-400 text-xs">Overdue</Badge>
+                            <Badge variant="destructive" className="text-xs">Overdue</Badge>
                           )}
                         </div>
                         <p className="text-xs text-muted-foreground">
@@ -144,7 +144,7 @@ export function FollowUpsPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <Check className="h-4 w-4 text-green-400 shrink-0" />
+                      <Check className="h-4 w-4 text-success shrink-0" />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium truncate">
