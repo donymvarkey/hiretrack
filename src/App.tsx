@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useAuthStore } from '@/store/auth-store'
 import { useThemeStore } from '@/store/theme-store'
+import { usePwaInstallStore } from '@/store/pwa-install-store'
 import { AppLayout } from '@/components/layout/app-layout'
 import { PageLoader } from '@/components/ui/spinner'
 import { PwaPrompt } from '@/components/features/pwa-prompt'
@@ -67,11 +68,13 @@ function GuestGuard({ children }: { children: React.ReactNode }) {
 function AppRoutes() {
   const { initialize } = useAuthStore()
   const initializeTheme = useThemeStore((s) => s.initialize)
+  const initializeInstall = usePwaInstallStore((s) => s.initialize)
 
   useEffect(() => {
     initialize()
     initializeTheme()
-  }, [initialize, initializeTheme])
+    initializeInstall()
+  }, [initialize, initializeTheme, initializeInstall])
 
   return (
     <Suspense fallback={<PageLoader />}>

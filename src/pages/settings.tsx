@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { User, Mail, Shield, Sun, Moon, Monitor, Palette, KeyRound } from 'lucide-react'
+import { User, Mail, Shield, Sun, Moon, Monitor, Palette, KeyRound, Download, Smartphone, LogOut, X } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuthStore } from '@/store/auth-store'
 import { useThemeStore, type Theme } from '@/store/theme-store'
+import { usePwaInstallStore } from '@/store/pwa-install-store'
 import { supabase } from '@/lib/supabase'
 import { Spinner } from '@/components/ui/spinner'
 import { cn } from '@/lib/utils'
@@ -17,11 +18,14 @@ const themeOptions: { value: Theme; label: string; icon: typeof Sun }[] = [
 ]
 
 export function SettingsPage() {
-  const { user } = useAuthStore()
+  const { user, signOut } = useAuthStore()
   const { theme, setTheme } = useThemeStore()
+  const { canInstall, installed, dismissed, promptInstall, dismiss } = usePwaInstallStore()
   const [newPassword, setNewPassword] = useState('')
   const [isUpdating, setIsUpdating] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  const showInstall = canInstall && !installed && !dismissed
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,6 +55,34 @@ export function SettingsPage() {
         <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
         <p className="text-sm text-muted-foreground">Manage your account and preferences</p>
       </div>
+
+      {/* Install app (one-time) */}
+      {showInstall && (
+        <Card className="overflow-hidden border-primary/30">
+          <CardContent className="flex items-center gap-4 p-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-gradient text-white shadow-sm">
+              <Smartphone className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">Install HireTrack</p>
+              <p className="text-xs text-muted-foreground">
+                Add it to your home screen for a faster, full-screen, offline-ready experience.
+              </p>
+            </div>
+            <Button size="sm" onClick={promptInstall} className="shrink-0 gap-1.5">
+              <Download className="h-4 w-4" />
+              Install
+            </Button>
+            <button
+              onClick={dismiss}
+              aria-label="Dismiss"
+              className="shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground cursor-pointer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Appearance */}
       <Card>
@@ -153,6 +185,16 @@ export function SettingsPage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Sign out */}
+      <Button
+        variant="outline"
+        onClick={signOut}
+        className="w-full gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive sm:w-auto"
+      >
+        <LogOut className="h-4 w-4" />
+        Sign Out
+      </Button>
     </div>
   )
 }

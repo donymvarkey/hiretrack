@@ -1,12 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
-import { Download, RefreshCw, X, Wifi } from 'lucide-react'
+import { RefreshCw, X, Wifi } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
-}
 
 export function PwaPrompt() {
   const {
@@ -15,19 +10,6 @@ export function PwaPrompt() {
     updateServiceWorker,
   } = useRegisterSW()
 
-  const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null)
-  const [installDismissed, setInstallDismissed] = useState(false)
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault()
-      setInstallEvent(e as BeforeInstallPromptEvent)
-    }
-    window.addEventListener('beforeinstallprompt', handler)
-    window.addEventListener('appinstalled', () => setInstallEvent(null))
-    return () => window.removeEventListener('beforeinstallprompt', handler)
-  }, [])
-
   // Auto-dismiss the "offline ready" toast after a few seconds
   useEffect(() => {
     if (!offlineReady) return
@@ -35,19 +17,10 @@ export function PwaPrompt() {
     return () => clearTimeout(t)
   }, [offlineReady, setOfflineReady])
 
-  const handleInstall = async () => {
-    if (!installEvent) return
-    await installEvent.prompt()
-    await installEvent.userChoice
-    setInstallEvent(null)
-  }
-
-  const showInstall = installEvent && !installDismissed && !needRefresh
-
-  if (!needRefresh && !offlineReady && !showInstall) return null
+  if (!needRefresh && !offlineReady) return null
 
   return (
-    <div className="fixed bottom-4 left-1/2 z-[60] w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 sm:left-auto sm:right-4 sm:translate-x-0">
+    <div className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-1/2 z-60 w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 sm:left-auto sm:right-4 sm:translate-x-0 lg:bottom-4">
       {needRefresh ? (
         <Toast
           icon={<RefreshCw className="h-4 w-4 text-primary" />}
@@ -57,19 +30,6 @@ export function PwaPrompt() {
           action={
             <Button size="sm" onClick={() => updateServiceWorker(true)}>
               Reload
-            </Button>
-          }
-        />
-      ) : showInstall ? (
-        <Toast
-          icon={<Download className="h-4 w-4 text-primary" />}
-          title="Install HireTrack"
-          description="Add it to your home screen for quick access."
-          onClose={() => setInstallDismissed(true)}
-          action={
-            <Button size="sm" onClick={handleInstall} className="gap-1.5">
-              <Download className="h-4 w-4" />
-              Install
             </Button>
           }
         />
